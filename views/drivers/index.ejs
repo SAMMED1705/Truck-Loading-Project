@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+<%- include('../partials/sidebar') %>
+
+<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi-person-badge"></i> Drivers</h2>
+    <a href="/drivers/create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Driver</a>
+  </div>
+  <%- include('../partials/flash') %>
+  <div class="card shadow-sm"><div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light"><tr><th style="width:60px;">#</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>License No.</th>
+            <th>License Expiry</th>
+            <th>Status</th>
+            <th style="width:180px;">Actions</th></tr></thead>
+        <tbody>
+          <% if (drivers.length === 0) { %>
+            <tr><td colspan="50" class="text-center text-muted py-4">No records yet.</td></tr>
+          <% } %>
+          <% drivers.forEach((item, i) => { %>
+            <tr><td><%= i + 1 %></td>
+            <td><%= item.name ?? '-' %></td>
+            <td><%= item.phone ?? '-' %></td>
+            <td><%= item.license_number ?? '-' %></td>
+            <td><%= item.license_expiry?new Date(item.license_expiry).toLocaleDateString():'-' %></td>
+            <td><span class="badge bg-secondary"><%= item.status %></span></td>
+            <td>
+              <a href="/drivers/<%= item.id %>" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
+              <a href="/drivers/<%= item.id %>/edit" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
+              <form action="/drivers/<%= item.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this record?');">
+                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+              </form>
+            </td></tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div></div>
+</main>
+
+<%- include('../partials/footer') %>

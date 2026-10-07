@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+<%- include('../partials/sidebar') %>
+
+<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi-cash-stack"></i> Edit Expense</h2>
+    <a href="/expenses" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+  </div>
+  <%- include('../partials/flash') %>
+  <div class="card shadow-sm"><div class="card-body">
+    <form action="/expenses/<%= expense.id %>?_method=PUT" method="POST">
+      <div class="row">
+        <div class="col-md-6 mb-3"><label class="form-label">Type <span class="text-danger">*</span></label>
+        <select name="expense_type" class="form-select" required>
+              <option value="diesel" <%= expense.expense_type === 'diesel' ? 'selected' : '' %>>diesel</option>
+              <option value="toll" <%= expense.expense_type === 'toll' ? 'selected' : '' %>>toll</option>
+              <option value="driver_allowance" <%= expense.expense_type === 'driver_allowance' ? 'selected' : '' %>>driver_allowance</option>
+              <option value="food" <%= expense.expense_type === 'food' ? 'selected' : '' %>>food</option>
+              <option value="maintenance" <%= expense.expense_type === 'maintenance' ? 'selected' : '' %>>maintenance</option>
+              <option value="other" <%= expense.expense_type === 'other' ? 'selected' : '' %>>other</option>
+        </select>
+      </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Amount <span class="text-danger">*</span></label>
+      <input type="number" name="amount" class="form-control" step="0.01" value="<%= expense.amount ?? '' %>" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Date <span class="text-danger">*</span></label>
+      <input type="datetime-local" name="expense_date" class="form-control"  value="<%= expense.expense_date ?? '' %>" required>
+    </div>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-warning"><i class="bi bi-check-lg"></i> Update</button>
+        <a href="/expenses" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+  </div></div>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,25 +1,10 @@
 const { Sequelize } = require("sequelize");
+const path = require("path");
 
 const sequelize = new Sequelize({
-	dialect: "sqlite",
-	storage: "./database.sqlite",
-	logging: console.log
+  dialect: "sqlite",
+  storage: path.join(__dirname, "..", "database.sqlite"),
+  logging: false
 });
 
-const connectDB = async () => {
-	try {
-		await sequelize.authenticate();
-		console.log("sqlite connected");
-
-		await sequelize.sync();
-		console.log("Database sync");
-	}catch (error) {
-		console.error("sqlite failed", error.message);
-		process.exit(1);
-	}
-};
-
-module.exports = {
-	sequelize,
-	connectDB
-};
+module.exports = sequelize;

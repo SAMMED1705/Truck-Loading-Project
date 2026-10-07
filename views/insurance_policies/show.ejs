@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+<%- include('../partials/sidebar') %>
+
+<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi-shield-check"></i> Insurance Details</h2>
+    <div>
+      <a href="/insurance_policies/<%= insurancePolicy.id %>/edit" class="btn btn-warning"><i class="bi bi-pencil"></i> Edit</a>
+      <a href="/insurance_policies" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+    </div>
+  </div>
+  <%- include('../partials/flash') %>
+  <div class="card shadow-sm"><div class="card-body">
+    <table class="table table-borderless">
+        <tr><th style="width:240px;">Policy No.</th><td><%= insurancePolicy.policy_number ?? '-' %></td></tr>
+        <tr><th style="width:240px;">Type</th><td><%= insurancePolicy.policy_type ?? '-' %></td></tr>
+        <tr><th style="width:240px;">Provider</th><td><%= insurancePolicy.provider_name ?? '-' %></td></tr>
+        <tr><th style="width:240px;">Coverage</th><td><%= insurancePolicy.coverage_amount ?? '-' %></td></tr>
+        <tr><th style="width:240px;">End Date</th><td><%= insurancePolicy.end_date ?? '-' %></td></tr>
+        <tr><th style="width:240px;">Status</th><td><%= insurancePolicy.status ?? '-' %></td></tr>
+    </table>
+  </div></div>
+</main>
+
+<%- include('../partials/footer') %>

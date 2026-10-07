@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+<%- include('../partials/sidebar') %>
+
+<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi-credit-card"></i> Create Payment</h2>
+    <a href="/payments" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+  </div>
+  <%- include('../partials/flash') %>
+  <div class="card shadow-sm"><div class="card-body">
+    <form action="/payments" method="POST">
+      <div class="row">
+        <div class="col-md-6 mb-3"><label class="form-label">Payment No. <span class="text-danger">*</span></label>
+      <input type="text" name="payment_number" class="form-control"  value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Amount <span class="text-danger">*</span></label>
+      <input type="number" name="amount" class="form-control" step="0.01" value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Date</label>
+      <input type="datetime-local" name="payment_date" class="form-control"  value="" >
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Method</label>
+        <select name="payment_method" class="form-select" >
+              <option value="cash" >cash</option>
+              <option value="bank" selected>bank</option>
+              <option value="upi" >upi</option>
+              <option value="cheque" >cheque</option>
+        </select>
+      </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Status</label>
+        <select name="status" class="form-select" >
+              <option value="pending" selected>pending</option>
+              <option value="paid" >paid</option>
+        </select>
+      </div>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+        <a href="/payments" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+  </div></div>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+<%- include('../partials/sidebar') %>
+
+<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi-shield-check"></i> Edit Insurance</h2>
+    <a href="/insurance_policies" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+  </div>
+  <%- include('../partials/flash') %>
+  <div class="card shadow-sm"><div class="card-body">
+    <form action="/insurance_policies/<%= insurancePolicy.id %>?_method=PUT" method="POST">
+      <div class="row">
+        <div class="col-md-6 mb-3"><label class="form-label">Policy No. <span class="text-danger">*</span></label>
+      <input type="text" name="policy_number" class="form-control"  value="<%= insurancePolicy.policy_number ?? '' %>" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Type <span class="text-danger">*</span></label>
+        <select name="policy_type" class="form-select" required>
+              <option value="vehicle" <%= insurancePolicy.policy_type === 'vehicle' ? 'selected' : '' %>>vehicle</option>
+              <option value="cargo" <%= insurancePolicy.policy_type === 'cargo' ? 'selected' : '' %>>cargo</option>
+              <option value="driver" <%= insurancePolicy.policy_type === 'driver' ? 'selected' : '' %>>driver</option>
+        </select>
+      </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Provider <span class="text-danger">*</span></label>
+      <input type="text" name="provider_name" class="form-control"  value="<%= insurancePolicy.provider_name ?? '' %>" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Coverage</label>
+      <input type="number" name="coverage_amount" class="form-control" step="0.01" value="<%= insurancePolicy.coverage_amount ?? '' %>" >
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">End Date</label>
+      <input type="datetime-local" name="end_date" class="form-control"  value="<%= insurancePolicy.end_date ?? '' %>" >
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Status</label>
+        <select name="status" class="form-select" >
+              <option value="active" <%= insurancePolicy.status === 'active' ? 'selected' : '' %>>active</option>
+              <option value="expired" <%= insurancePolicy.status === 'expired' ? 'selected' : '' %>>expired</option>
+        </select>
+      </div>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-warning"><i class="bi bi-check-lg"></i> Update</button>
+        <a href="/insurance_policies" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+  </div></div>
+</main>
+
+<%- include('../partials/footer') %>

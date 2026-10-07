@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+<%- include('../partials/sidebar') %>
+
+<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi-box-seam"></i> Create Load</h2>
+    <a href="/loads" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back</a>
+  </div>
+  <%- include('../partials/flash') %>
+  <div class="card shadow-sm"><div class="card-body">
+    <form action="/loads" method="POST">
+      <div class="row">
+        <div class="col-md-6 mb-3"><label class="form-label">Load No. <span class="text-danger">*</span></label>
+      <input type="text" name="load_number" class="form-control"  value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Commodity <span class="text-danger">*</span></label>
+      <input type="text" name="commodity" class="form-control"  value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Origin <span class="text-danger">*</span></label>
+      <input type="text" name="origin" class="form-control"  value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Destination <span class="text-danger">*</span></label>
+      <input type="text" name="destination" class="form-control"  value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Weight (KG) <span class="text-danger">*</span></label>
+      <input type="number" name="weight_kg" class="form-control" step="0.01" value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Pickup From <span class="text-danger">*</span></label>
+      <input type="datetime-local" name="pickup_from" class="form-control"  value="" required>
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Offered Price</label>
+      <input type="number" name="offered_price" class="form-control" step="0.01" value="" >
+    </div>
+        <div class="col-md-6 mb-3"><label class="form-label">Status</label>
+        <select name="status" class="form-select" >
+              <option value="posted" selected>posted</option>
+              <option value="matched" >matched</option>
+              <option value="booked" >booked</option>
+              <option value="delivered" >delivered</option>
+        </select>
+      </div>
+      </div>
+      <div class="mt-3">
+        <button class="btn btn-primary"><i class="bi bi-check-lg"></i> Save</button>
+        <a href="/loads" class="btn btn-outline-secondary">Cancel</a>
+      </div>
+    </form>
+  </div></div>
+</main>
+
+<%- include('../partials/footer') %>
