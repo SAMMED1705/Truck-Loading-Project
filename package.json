@@ -1,12 +1,30 @@
 {
  "scripts": {
   "start": "node app.js",
-  "dev": "nodemon app.js"
+  "dev": "nodemon  app.js",
+  "seed": "node seed/index.js",
+  "db:reset": "node seed/reset.js",
+  "db:migrate": "npx sequelize-cli db:migrate",
+  "scaffold": "node scripts/scaffold.js"
  },
  "dependencies": {
-  "express": "^5.2.1"
+  "bcrypt": "^6.0.0",
+  "bootstrap": "^5.3.8",
+  "bootstrap-icons": "^1.13.1",
+  "connect-session-sequelize": "^6.1.1",
+  "dotenv": "^18.0.6",
+  "ejs": "^7.0.1",
+  "express": "^5.2.1",
+  "express-session": "^1.19.0",
+  "express-validator": "^7.3.2",
+  "helmet": "^8.3.0",
+  "method-override": "^3.0.0",
+  "morgan": "^1.12.1",
+  "multer": "^2.4.0",
+  "sequelize": "^6.37.8",
+  "sqlite3": "^6.0.1"
  },
  "devDependencies": {
-  "nodemon": "^3.1.14"
+  "nodemon": "^1.14.10"
  }
 }
