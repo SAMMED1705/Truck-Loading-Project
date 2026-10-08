@@ -1,45 +1,65 @@
 <%- include('../partials/header') %>
 <%- include('../partials/sidebar') %>
 
-<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+<main class="main-content">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi-geo-alt"></i> Trips</h2>
     <a href="/trips/create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Trip</a>
   </div>
   <%- include('../partials/flash') %>
-  <div class="card shadow-sm"><div class="card-body">
+  <div class="list-card">
+    <div class="list-header">
+      <h5>Active Trips</h5>
+      <span class="text-muted" style="font-size: 0.85rem;">Track live location, route, and delivery status</span>
+    </div>
     <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-light"><tr><th style="width:60px;">#</th>
-            <th>Trip No.</th>
-            <th>Start Date</th>
-            <th>Start Location</th>
-            <th>End Location</th>
-            <th>Status</th>
-            <th style="width:180px;">Actions</th></tr></thead>
+      <table class="table align-middle">
+        <thead style="background: #f9fafb; font-size: 0.85rem; color: var(--text-muted);">
+          <tr>
+            <th class="border-0 rounded-start">#</th>
+            <th class="border-0">Trip No.</th>
+            <th class="border-0">Start Date</th>
+            <th class="border-0">Start Location <i class="bi bi-arrow-right mx-1"></i> End Location</th>
+            <th class="border-0">Status</th>
+            <th class="border-0 rounded-end text-end" style="width:120px;">Actions</th>
+          </tr>
+        </thead>
         <tbody>
           <% if (trips.length === 0) { %>
-            <tr><td colspan="50" class="text-center text-muted py-4">No records yet.</td></tr>
+            <tr><td colspan="6" class="text-center text-muted py-5">
+              <i class="bi bi-signpost-split fs-1 text-light mb-3 d-block"></i>
+              No trips started yet.<br>
+              <a href="/trips/create" class="btn btn-sm btn-outline-primary mt-2">Start a Trip</a>
+            </td></tr>
           <% } %>
           <% trips.forEach((item, i) => { %>
-            <tr><td><%= i + 1 %></td>
-            <td><%= item.trip_number ?? '-' %></td>
-            <td><%= item.start_date?new Date(item.start_date).toLocaleDateString():'-' %></td>
-            <td><%= item.start_location ?? '-' %></td>
-            <td><%= item.end_location ?? '-' %></td>
-            <td><span class="badge bg-secondary"><%= item.status %></span></td>
-            <td>
-              <a href="/trips/<%= item.id %>" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
-              <a href="/trips/<%= item.id %>/edit" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
-              <form action="/trips/<%= item.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this record?');">
-                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-              </form>
-            </td></tr>
+            <tr style="border-bottom: 1px solid #f3f4f6;">
+              <td class="text-muted"><%= i + 1 %></td>
+              <td class="fw-bold text-primary"><%= item.trip_number ?? '-' %></td>
+              <td><span class="badge bg-light text-dark border"><%= item.start_date ? new Date(item.start_date).toLocaleDateString() : '-' %></span></td>
+              <td>
+                <span class="fw-medium"><%= item.start_location ?? '-' %></span> 
+                <i class="bi bi-arrow-right text-muted mx-1"></i> 
+                <span class="fw-medium"><%= item.end_location ?? '-' %></span>
+              </td>
+              <td>
+                <% if(item.status === 'In Progress') { %> <span class="badge-soft badge-transit">In Progress</span>
+                <% } else if(item.status === 'Completed') { %> <span class="badge-soft badge-available text-success">Completed</span>
+                <% } else { %> <span class="badge bg-secondary"><%= item.status %></span> <% } %>
+              </td>
+              <td class="text-end">
+                <a href="/trips/<%= item.id %>" class="btn btn-sm btn-light text-primary"><i class="bi bi-geo-alt"></i> Track</a>
+                <a href="/trips/<%= item.id %>/edit" class="btn btn-sm btn-light text-warning"><i class="bi bi-pencil"></i></a>
+                <form action="/trips/<%= item.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this record?');">
+                  <button class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                </form>
+              </td>
+            </tr>
           <% }); %>
         </tbody>
       </table>
     </div>
-  </div></div>
+  </div>
 </main>
 
 <%- include('../partials/footer') %>

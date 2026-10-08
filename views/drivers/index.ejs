@@ -1,45 +1,63 @@
 <%- include('../partials/header') %>
 <%- include('../partials/sidebar') %>
 
-<main class="col-md-10 ms-sm-auto px-md-4 py-4">
+<main class="main-content">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2><i class="bi-person-badge"></i> Drivers</h2>
     <a href="/drivers/create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Driver</a>
   </div>
   <%- include('../partials/flash') %>
-  <div class="card shadow-sm"><div class="card-body">
+  <div class="list-card">
+    <div class="list-header">
+      <h5>Drivers Directory</h5>
+      <span class="text-muted" style="font-size: 0.85rem;">Manage all registered drivers and their status</span>
+    </div>
     <div class="table-responsive">
-      <table class="table table-hover align-middle">
-        <thead class="table-light"><tr><th style="width:60px;">#</th>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>License No.</th>
-            <th>License Expiry</th>
-            <th>Status</th>
-            <th style="width:180px;">Actions</th></tr></thead>
+      <table class="table align-middle">
+        <thead style="background: #f9fafb; font-size: 0.85rem; color: var(--text-muted);">
+          <tr>
+            <th class="border-0 rounded-start">#</th>
+            <th class="border-0">Name</th>
+            <th class="border-0">Phone</th>
+            <th class="border-0">License No.</th>
+            <th class="border-0">License Expiry</th>
+            <th class="border-0">Status</th>
+            <th class="border-0 rounded-end text-end" style="width:120px;">Actions</th>
+          </tr>
+        </thead>
         <tbody>
           <% if (drivers.length === 0) { %>
-            <tr><td colspan="50" class="text-center text-muted py-4">No records yet.</td></tr>
+            <tr><td colspan="7" class="text-center text-muted py-5">
+              <i class="bi bi-person-badge fs-1 text-light mb-3 d-block"></i>
+              No drivers added yet.<br>
+              <a href="/drivers/create" class="btn btn-sm btn-outline-primary mt-2">Add Driver</a>
+            </td></tr>
           <% } %>
           <% drivers.forEach((item, i) => { %>
-            <tr><td><%= i + 1 %></td>
-            <td><%= item.name ?? '-' %></td>
-            <td><%= item.phone ?? '-' %></td>
-            <td><%= item.license_number ?? '-' %></td>
-            <td><%= item.license_expiry?new Date(item.license_expiry).toLocaleDateString():'-' %></td>
-            <td><span class="badge bg-secondary"><%= item.status %></span></td>
-            <td>
-              <a href="/drivers/<%= item.id %>" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
-              <a href="/drivers/<%= item.id %>/edit" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
-              <form action="/drivers/<%= item.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this record?');">
-                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-              </form>
-            </td></tr>
+            <tr style="border-bottom: 1px solid #f3f4f6;">
+              <td class="text-muted"><%= i + 1 %></td>
+              <td class="fw-bold"><div class="d-flex align-items-center gap-2"><img src="https://ui-avatars.com/api/?name=<%= item.name || 'D' %>&background=random" width="30" height="30" class="rounded-circle"> <%= item.name ?? '-' %></div></td>
+              <td><%= item.phone ?? '-' %></td>
+              <td><%= item.license_number ?? '-' %></td>
+              <td><%= item.license_expiry?new Date(item.license_expiry).toLocaleDateString():'-' %></td>
+              <td>
+                <% if(item.status === 'Active') { %> <span class="badge-soft badge-available">Active</span>
+                <% } else if(item.status === 'Inactive') { %> <span class="badge bg-secondary">Inactive</span>
+                <% } else { %> <span class="badge bg-secondary"><%= item.status %></span> <% } %>
+              </td>
+              <td class="text-end">
+                <a href="/drivers/<%= item.id %>" class="btn btn-sm btn-light text-primary"><i class="bi bi-eye"></i></a>
+                <a href="/drivers/<%= item.id %>/edit" class="btn btn-sm btn-light text-warning"><i class="bi bi-pencil"></i></a>
+                <form action="/drivers/<%= item.id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this record?');">
+                  <button class="btn btn-sm btn-light text-danger"><i class="bi bi-trash"></i></button>
+                </form>
+              </td>
+            </tr>
           <% }); %>
         </tbody>
       </table>
     </div>
-  </div></div>
+  </div>
 </main>
 
 <%- include('../partials/footer') %>
