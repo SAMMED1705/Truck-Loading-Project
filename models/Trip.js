@@ -7,6 +7,7 @@ const Trip = sequelize.define("Trip", {
     start_date: { type: DataTypes.DATE },
     start_location: { type: DataTypes.STRING },
     end_location: { type: DataTypes.STRING },
+    distance_km: { type: DataTypes.DECIMAL(10,2), defaultValue: 0 },
     status: { type: DataTypes.ENUM("planned","started","completed"), defaultValue: "planned" }
 }, { tableName: "trips", timestamps: true, underscored: true });
 

@@ -12,10 +12,10 @@
         <div>
           <div class="stat-label">Available Trucks</div>
           <div class="d-flex align-items-baseline gap-2">
-            <h3 class="stat-value">18</h3>
+            <h3 class="stat-value"><%= stats.availableTrucks %></h3>
             <span class="stat-trend trend-up"><i class="bi bi-arrow-up-short"></i> 12%</span>
           </div>
-          <div class="stat-label" style="font-size: 0.7rem;">Out of 25 total</div>
+          <div class="stat-label" style="font-size: 0.7rem;">Out of <%= stats.totalTrucks %> total</div>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@
         <div>
           <div class="stat-label">Active Loads</div>
           <div class="d-flex align-items-baseline gap-2">
-            <h3 class="stat-value">32</h3>
+            <h3 class="stat-value"><%= stats.activeLoads %></h3>
             <span class="stat-trend trend-up"><i class="bi bi-arrow-up-short"></i> 8%</span>
           </div>
           <div class="stat-label" style="font-size: 0.7rem;">Today's postings</div>
@@ -42,7 +42,7 @@
         <div>
           <div class="stat-label">Today's Bookings</div>
           <div class="d-flex align-items-baseline gap-2">
-            <h3 class="stat-value">14</h3>
+            <h3 class="stat-value"><%= stats.totalBookings %></h3>
             <span class="stat-trend trend-up"><i class="bi bi-arrow-up-short"></i> 22%</span>
           </div>
           <div class="stat-label" style="font-size: 0.7rem;">vs. yesterday</div>
@@ -57,10 +57,10 @@
         <div>
           <div class="stat-label">Total Distance (Today)</div>
           <div class="d-flex align-items-baseline gap-2">
-            <h3 class="stat-value">1,240 <span style="font-size: 1rem;">km</span></h3>
+            <h3 class="stat-value"><%= stats.totalDistance.toLocaleString() %> <span style="font-size: 1rem;">km</span></h3>
             <span class="stat-trend trend-up"><i class="bi bi-arrow-up-short"></i> 15%</span>
           </div>
-          <div class="stat-label" style="font-size: 0.7rem;">Across 8 trips</div>
+          <div class="stat-label" style="font-size: 0.7rem;">Across <%= stats.tripsWithDistance %> trips</div>
         </div>
       </div>
     </div>
@@ -71,14 +71,42 @@
     <div class="col-md-8">
       
       <!-- Map Section -->
-      <div class="map-container mb-4">
-        <img src="/images/map.jpg" alt="Map Route">
-        <div class="map-controls">
+      <div class="map-container mb-4 position-relative">
+        <iframe 
+          src="https://maps.google.com/maps?q=Hubli+to+Dharwad&t=&z=11&ie=UTF8&iwloc=&output=embed" 
+          width="100%" 
+          height="100%" 
+          frameborder="0" 
+          style="border:0;" 
+          allowfullscreen="" 
+          aria-hidden="false" 
+          tabindex="0">
+        </iframe>
+        
+        <!-- Invisible Overlay Anchor Hook to Google Maps -->
+        <a href="https://www.google.com/maps/dir/Hubli/Dharwad" target="_blank" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; cursor: pointer;"></a>
+
+        <div class="map-controls" style="z-index: 6; pointer-events: none;">
           <button class="active">Map</button>
           <button>Satellite</button>
         </div>
+
+        <!-- Dummy Truck 1 -->
+        <div class="position-absolute" style="top: 45%; left: 35%; z-index: 6; pointer-events: none;">
+           <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 35px; height: 35px; border: 2px solid white;">
+             <i class="bi bi-truck" style="font-size: 1rem;"></i>
+           </div>
+        </div>
+        
+        <!-- Dummy Truck 2 -->
+        <div class="position-absolute" style="top: 65%; left: 55%; z-index: 6; pointer-events: none;">
+           <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center shadow" style="width: 35px; height: 35px; border: 2px solid white;">
+             <i class="bi bi-truck" style="font-size: 1rem;"></i>
+           </div>
+        </div>
+
         <!-- Absolute positioned pin info for demo purposes -->
-        <div class="position-absolute bg-white rounded p-2 shadow-sm d-flex align-items-center gap-2" style="top: 20%; left: 50%; border: 1px solid #e5e7eb;">
+        <div class="position-absolute bg-white rounded p-2 shadow-sm d-flex align-items-center gap-2" style="top: 25%; left: 45%; border: 1px solid #e5e7eb; z-index: 6; pointer-events: none;">
           <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=50&h=50&fit=crop" class="rounded" alt="Truck">
           <div>
             <div class="fw-bold" style="font-size: 0.8rem;">KA25AB1234 <span class="badge bg-success ms-2">On Trip</span></div>
@@ -141,54 +169,61 @@
         <!-- Price Calculator -->
         <div class="col-md-6">
           <div class="price-calculator h-100">
-            <h5>Price Calculator</h5>
+            <h5 class="d-flex align-items-center gap-2">
+              Price Calculator
+              <i class="bi bi-info-circle text-muted" style="font-size: 0.9rem; cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="top" title="Calculation factors: Distance (approximate routing), Base Freight (₹2.5/km/ton), Toll Tax, Loading & Unloading fees"></i>
+            </h5>
             <p class="text-muted" style="font-size: 0.85rem;">Calculate your freight cost</p>
             
             <div class="row g-2 mb-3">
               <div class="col-6">
                 <label style="font-size: 0.8rem; font-weight: 500;">From</label>
-                <select class="form-select form-select-sm"><option>Hubli</option></select>
+                <input type="text" id="calc-from" class="form-control form-control-sm" value="Hubli">
               </div>
               <div class="col-6">
                 <label style="font-size: 0.8rem; font-weight: 500;">To</label>
-                <select class="form-select form-select-sm"><option>Dharwad</option></select>
+                <input type="text" id="calc-to" class="form-control form-control-sm" value="Dharwad">
               </div>
             </div>
             
             <div class="mb-3">
               <label style="font-size: 0.8rem; font-weight: 500;">Weight (KG)</label>
-              <input type="text" class="form-control form-control-sm" value="5000">
+              <input type="number" id="calc-weight" class="form-control form-control-sm" value="5000">
             </div>
             <div class="mb-3">
               <label style="font-size: 0.8rem; font-weight: 500;">Truck Type</label>
-              <select class="form-select form-select-sm"><option>16 Ton (Container)</option></select>
+              <select id="calc-type" class="form-select form-select-sm">
+                <option value="1">16 Ton (Container)</option>
+                <option value="1.2">20 Ton (Container)</option>
+                <option value="1.5">25 Ton (Open)</option>
+              </select>
             </div>
             
             <div class="mb-3 d-flex gap-3" style="font-size: 0.85rem;">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="loadType" checked>
-                <label class="form-check-label">Shared</label>
+                <input class="form-check-input" type="radio" name="loadType" id="calc-shared" value="0.7" checked>
+                <label class="form-check-label" for="calc-shared">Shared</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="loadType">
-                <label class="form-check-label">Direct</label>
+                <input class="form-check-input" type="radio" name="loadType" id="calc-direct" value="1">
+                <label class="form-check-label" for="calc-direct">Direct</label>
               </div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div>
                 <div style="font-size: 0.8rem;">Estimated Cost</div>
-                <h3 class="text-primary fw-bold mb-0">₹ 12,500</h3>
+                <h3 class="text-primary fw-bold mb-0" id="calc-est-cost">₹ 0</h3>
               </div>
               <div style="font-size: 0.8rem; text-align: right;">
-                <div>Base Freight (₹ 2.5/km) <span class="ms-2">₹ 10,250</span></div>
-                <div>Toll Charges <span class="ms-2">₹ 1,000</span></div>
-                <div>Loading <span class="ms-2">₹ 250</span></div>
-                <div>Unloading <span class="ms-2">₹ 250</span></div>
-                <div class="fw-bold mt-1">Total <span class="ms-2">₹ 12,500</span></div>
+                <div>Base Freight <span class="ms-2" id="calc-base">₹ 0</span></div>
+                <div>Toll Charges <span class="ms-2" id="calc-toll">₹ 0</span></div>
+                <div>Loading <span class="ms-2" id="calc-load">₹ 0</span></div>
+                <div>Unloading <span class="ms-2" id="calc-unload">₹ 0</span></div>
+                <div class="fw-bold mt-1">Total <span class="ms-2" id="calc-total">₹ 0</span></div>
               </div>
             </div>
-            <button class="btn btn-primary w-100 fw-bold">Calculate Price</button>
+            <button id="calc-btn" class="btn btn-primary w-100 fw-bold">Calculate Price</button>
           </div>
         </div>
       </div>
@@ -337,4 +372,61 @@
 
   </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize tooltips
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+  const btn = document.getElementById('calc-btn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      // Dummy distance calculation for demo
+      const from = document.getElementById('calc-from').value.trim();
+      const to = document.getElementById('calc-to').value.trim();
+      
+      let distance = 250; // default distance
+      if (from.toLowerCase() === 'hubli' && to.toLowerCase() === 'dharwad') distance = 20;
+      else if (from.toLowerCase() === 'hubli' && to.toLowerCase() === 'belagavi') distance = 100;
+      else if (from.toLowerCase() === 'hubli' && to.toLowerCase() === 'bengaluru') distance = 400;
+
+      const weight = parseInt(document.getElementById('calc-weight').value) || 0;
+      const typeMultiplier = parseFloat(document.getElementById('calc-type').value);
+      
+      const isShared = document.getElementById('calc-shared').checked;
+      const loadMultiplier = isShared ? 0.6 : 1;
+
+      // Base Freight: Distance * (Weight in tons) * base rate * multipliers
+      // e.g. Hubli to Dharwad (20km), 5 tons -> 20 * 5 * 10 = 1000 base
+      const tons = weight / 1000;
+      const baseRatePerTonKm = 15; // realistic dummy rate
+      let base = distance * tons * baseRatePerTonKm * typeMultiplier * loadMultiplier;
+      
+      // Minimum base charge
+      if (base < 1500) base = 1500;
+      
+      // Toll charges approx 2.5% of base
+      let toll = Math.round(base * 0.025);
+      
+      // Loading/Unloading fixed logic
+      let loadCost = Math.round(250 * typeMultiplier * (tons > 0 ? (tons / 2) : 1));
+      let unloadCost = Math.round(250 * typeMultiplier * (tons > 0 ? (tons / 2) : 1));
+
+      let total = base + toll + loadCost + unloadCost;
+
+      document.getElementById('calc-base').innerText = `₹ ${Math.round(base).toLocaleString()}`;
+      document.getElementById('calc-toll').innerText = `₹ ${toll.toLocaleString()}`;
+      document.getElementById('calc-load').innerText = `₹ ${loadCost.toLocaleString()}`;
+      document.getElementById('calc-unload').innerText = `₹ ${unloadCost.toLocaleString()}`;
+      document.getElementById('calc-total').innerText = `₹ ${Math.round(total).toLocaleString()}`;
+      document.getElementById('calc-est-cost').innerText = `₹ ${Math.round(total).toLocaleString()}`;
+    });
+
+    // Trigger calculation initially
+    btn.click();
+  }
+});
+</script>
+
 <%- include('../partials/footer') %>

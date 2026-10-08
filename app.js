@@ -4,7 +4,7 @@ const session = require("express-session");
 const path = require("path");
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
-const { sequelize } = require("./models");
+const { sequelize, Truck, Load, Trip } = require("./models");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -22,7 +22,42 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => res.redirect("/login"));
-app.get("/dashboard", (req, res) => res.render("dashboard/index", { title: "Dashboard" }));
+app.get("/dashboard", async (req, res) => {
+  try {
+    const totalTrucks = await Truck.count();
+    const availableTrucks = await Truck.count({ where: { status: 'available' } });
+    
+    // For loads, assuming 'posted' is active
+    const activeLoads = await Load.count({ where: { status: 'posted' } });
+    
+    // Total bookings could be all trips or shipments, let's use Trips count
+    const totalBookings = await Trip.count();
+    
+    // Distance calculation
+    const distanceResult = await Trip.sum('distance_km');
+    const totalDistance = distanceResult || 0;
+    
+    const tripsWithDistance = await Trip.count({ where: { distance_km: { [sequelize.Sequelize.Op.gt]: 0 } } });
+
+    res.render("dashboard/index", { 
+      title: "Dashboard",
+      stats: {
+        totalTrucks,
+        availableTrucks,
+        activeLoads,
+        totalBookings,
+        totalDistance,
+        tripsWithDistance
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.render("dashboard/index", { 
+      title: "Dashboard",
+      stats: { totalTrucks: 0, availableTrucks: 0, activeLoads: 0, totalBookings: 0, totalDistance: 0, tripsWithDistance: 0 }
+    });
+  }
+});
 
 // AUTO-R-START
 app.use('/drivers', require('./routes/driversRoutes'));
